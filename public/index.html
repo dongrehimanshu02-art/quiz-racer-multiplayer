@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Racer</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <main class="app">
+    <section id="homeView" class="view">
+      <div class="hero">
+        <div class="badge">🏁 LIVE MULTIPLAYER EVENT</div>
+        <h1>QUIZ <span>RACER</span></h1>
+        <p>Race. Answer. Score. Reach the podium.</p>
+        <div class="home-actions">
+          <button class="primary" id="joinBtn">Join Race</button>
+          <a class="secondary" href="/host.html">Host / Admin</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="joinView" class="view hidden">
+      <div class="card narrow">
+        <button class="back" data-home>← Back</button>
+        <h2>Join the Race</h2>
+        <p id="roomStatus">Enter the room code shown by the host.</p>
+        <input id="roomCode" maxlength="5" placeholder="ROOM CODE" autocomplete="off" />
+        <input id="playerName" maxlength="24" placeholder="Your name" autocomplete="off" />
+        <div class="cars" id="cars">
+          <button data-car="0" class="car selected">🚗</button>
+          <button data-car="1" class="car">🏎️</button>
+          <button data-car="2" class="car">🚙</button>
+          <button data-car="3" class="car">🚕</button>
+          <button data-car="4" class="car">🚓</button>
+          <button data-car="5" class="car">🚘</button>
+        </div>
+        <button class="primary full" id="joinRace">JOIN RACE</button>
+        <p id="joinError" class="error"></p>
+      </div>
+    </section>
+
+    <section id="lobbyView" class="view hidden">
+      <div class="card">
+        <div class="topline"><span id="lobbyTitle"></span><span id="lobbyCode"></span></div>
+        <h2>Waiting for the host...</h2>
+        <div class="big-count"><span id="playerCount">0</span><small> players joined</small></div>
+        <div id="playerGrid" class="player-grid"></div>
+        <p class="muted">Keep this page open. The race will start automatically.</p>
+      </div>
+    </section>
+
+    <section id="gameView" class="view hidden">
+      <div class="game-header">
+        <div><strong id="gameTitle">Quiz Racer</strong><br><small id="questionNumber"></small></div>
+        <div class="score-box">SCORE <strong id="myScore">0</strong></div>
+      </div>
+      <div class="track" id="track">
+        <div class="finish-line">🏁</div>
+        <div class="my-car" id="myCar">🏎️</div>
+      </div>
+      <div class="question-card">
+        <div class="timer" id="timer">10</div>
+        <h2 id="questionText">Get ready...</h2>
+        <div class="answers" id="answers"></div>
+        <div id="answerFeedback" class="feedback"></div>
+      </div>
+    </section>
+
+    <section id="resultView" class="view hidden">
+      <div class="card results">
+        <div class="badge">🏆 RACE FINISHED</div>
+        <h1>Final Leaderboard</h1>
+        <div id="myResult" class="my-result"></div>
+        <div id="leaderboard"></div>
+        <button class="primary full" onclick="location.href='/'">BACK TO HOME</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/app.js"></script>
+</body>
+</html>

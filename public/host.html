@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Racer Host</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+<main class="host-app">
+  <header class="host-header">
+    <div><div class="badge">HOST CONTROL</div><h1>QUIZ RACER</h1></div>
+    <a class="secondary" href="/">Player View</a>
+  </header>
+
+  <section id="setup" class="host-grid">
+    <div class="card">
+      <h2>Create a Level</h2>
+      <input id="hostSecret" type="password" placeholder="Host secret" />
+      <input id="levelTitle" placeholder="Level title" value="General Knowledge Race" />
+      <p class="muted">Add 10–15 questions. Each must have exactly 4 options.</p>
+      <div id="questionEditor"></div>
+      <div class="host-actions">
+        <button class="secondary" id="addQuestion">+ Add Question</button>
+        <button class="primary" id="createRoom">CREATE RACE ROOM</button>
+      </div>
+      <p id="hostError" class="error"></p>
+    </div>
+
+    <div class="card sticky">
+      <h2>How the event works</h2>
+      <ol class="steps">
+        <li>Create 10–15 questions.</li>
+        <li>Create a room.</li>
+        <li>Show the QR code on the projector.</li>
+        <li>Players scan and enter their names.</li>
+        <li>Start when everyone is ready.</li>
+        <li>Show the final Top 10.</li>
+      </ol>
+      <div class="tip">For a real event, test the game with 50+ devices before the event.</div>
+    </div>
+  </section>
+
+  <section id="roomPanel" class="hidden">
+    <div class="host-grid">
+      <div class="card room-card">
+        <div class="badge">ROOM READY</div>
+        <h1 id="roomTitle">Quiz Racer</h1>
+        <div class="room-code" id="roomCode">-----</div>
+        <img id="qr" class="qr" alt="Join QR code" />
+        <p>Scan to join:</p>
+        <a id="joinLink" target="_blank" rel="noreferrer"></a>
+        <div class="big-count"><span id="hostPlayerCount">0</span><small> / 70 players</small></div>
+        <div id="hostPlayers" class="player-list"></div>
+        <button class="primary full" id="startRace">START RACE</button>
+        <button class="danger full" id="finishRace">END RACE</button>
+        <p id="roomMessage" class="muted"></p>
+      </div>
+
+      <div class="card">
+        <h2>Event Display</h2>
+        <div class="display-preview">
+          <div class="race-lights">🔴 🔴 🔴</div>
+          <h2 id="displayQuestion">Waiting for players...</h2>
+          <div id="displayAnswers" class="display-answers"></div>
+        </div>
+        <h3>Live Scores</h3>
+        <div id="liveScores"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/host.js"></script>
+</body>
+</html>
