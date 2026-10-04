@@ -142,34 +142,39 @@ function startNextQuestion(room) {
   }
 
   room.questionIndex += 1;
-  room.questionStartedAt = Date.now();
+  room.questionStartedAt = 0;
   room.answersThisQuestion = new Set();
 
   // Reset per-question state.
   for (const p of room.players.values()) p.answeredCurrent = false;
 
   const q = room.questions[room.questionIndex - 1];
+  const revealDelay = 4000;
   io.to(room.code).emit("question:start", {
     number: room.questionIndex,
     total: room.questions.length,
+    revealDelay,
     question: {
       text: q.text,
       options: q.options,
-      timeLimit: q.timeLimit
+      timeLimit: 15
     }
   });
 
   if (room.timer) clearTimeout(room.timer);
   room.timer = setTimeout(() => {
-    io.to(room.code).emit("question:timeout", {
-      number: room.questionIndex
-    });
-    setTimeout(() => startNextQuestion(room), 1200);
-  }, q.timeLimit * 1000);
+    room.questionStartedAt = Date.now();
+    room.timer = setTimeout(() => {
+      io.to(room.code).emit("question:timeout", {
+        number: room.questionIndex
+      });
+      setTimeout(() => startNextQuestion(room), 1200);
+    }, 15000);
+  }, revealDelay);
 }
 
 function scoreFor(q, elapsedMs) {
-  const limit = q.timeLimit * 1000;
+  const limit = 15000;
   const ratio = Math.max(0, Math.min(1, elapsedMs / limit));
   // Correct answer: 100 at instant response, 20 at time limit.
   return Math.max(20, Math.round(100 - 80 * ratio));
@@ -186,7 +191,7 @@ function normalizeQuestions(input) {
       ? q.options.map(x => cleanText(x, 120)).slice(0, 4)
       : [];
     const correct = Number(q.correct);
-    const timeLimit = Math.max(5, Math.min(20, Number(q.timeLimit) || 10));
+    const timeLimit = 15;
 
     if (!text || options.length !== 4 || options.some(x => !x) ||
         !Number.isInteger(correct) || correct < 0 || correct > 3) {

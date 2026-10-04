@@ -3,40 +3,30 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Quiz Racer</title>
+  <title>Quiz Race | AI Club</title>
   <link rel="stylesheet" href="/style.css" />
 </head>
 <body>
   <main class="app">
     <section id="homeView" class="view">
-      <div class="hero">
-        <div class="badge">🏁 LIVE MULTIPLAYER EVENT</div>
-        <h1>QUIZ <span>RACER</span></h1>
-        <p>Race. Answer. Score. Reach the podium.</p>
+      <div class="hero home-hero">
+        <div class="badge">🏁 EVENT QUIZ PROTOTYPE</div>
+        <h1>QUIZ <span>RACE</span></h1>
+        <p class="hero-subtitle">Think fast. Answer faster. Race to the finish.</p>
+        <p class="club-line">Made by <strong>AI Club</strong> • Built for events, competitions & fun</p>
+
+        <div class="join-panel">
+          <input id="roomCode" maxlength="5" placeholder="ENTER ROOM CODE" autocomplete="off" />
+          <input id="playerName" maxlength="24" placeholder="ENTER YOUR NAME" autocomplete="off" />
+          <button class="primary full" id="joinRace">JOIN RACE</button>
+          <p id="joinError" class="error"></p>
+        </div>
+
         <div class="home-actions">
-          <button class="primary" id="joinBtn">Join Race</button>
+          <button class="secondary" id="aboutBtn">ℹ About Web</button>
           <a class="secondary" href="/host.html">Host / Admin</a>
         </div>
-      </div>
-    </section>
-
-    <section id="joinView" class="view hidden">
-      <div class="card narrow">
-        <button class="back" data-home>← Back</button>
-        <h2>Join the Race</h2>
-        <p id="roomStatus">Enter the room code shown by the host.</p>
-        <input id="roomCode" maxlength="5" placeholder="ROOM CODE" autocomplete="off" />
-        <input id="playerName" maxlength="24" placeholder="Your name" autocomplete="off" />
-        <div class="cars" id="cars">
-          <button data-car="0" class="car selected">🚗</button>
-          <button data-car="1" class="car">🏎️</button>
-          <button data-car="2" class="car">🚙</button>
-          <button data-car="3" class="car">🚕</button>
-          <button data-car="4" class="car">🚓</button>
-          <button data-car="5" class="car">🚘</button>
-        </div>
-        <button class="primary full" id="joinRace">JOIN RACE</button>
-        <p id="joinError" class="error"></p>
+        <p class="home-note">Enter the room code given by the host. No app installation required.</p>
       </div>
     </section>
 
@@ -52,31 +42,66 @@
 
     <section id="gameView" class="view hidden">
       <div class="game-header">
-        <div><strong id="gameTitle">Quiz Racer</strong><br><small id="questionNumber"></small></div>
+        <div><strong id="gameTitle">QUIZ RACE</strong><br><small id="questionNumber"></small></div>
         <div class="score-box">SCORE <strong id="myScore">0</strong></div>
       </div>
-      <div class="track" id="track">
-        <div class="finish-line">🏁</div>
-        <div class="my-car" id="myCar">🏎️</div>
+
+      <div class="race-stage" id="raceStage">
+        <div class="race-lights" id="raceLights" aria-label="Race starting lights">
+          <span class="light red active"></span>
+          <span class="light yellow"></span>
+          <span class="light green"></span>
+        </div>
+        <div class="start-message" id="startMessage">GET READY</div>
+
+        <div class="track" id="track">
+          <div class="lane-markings"></div>
+          <div class="finish-line">🏁</div>
+          <div class="my-car" id="myCar">🏎️</div>
+        </div>
       </div>
-      <div class="question-card">
-        <div class="timer" id="timer">10</div>
+
+      <div class="question-card hidden" id="questionCard">
+        <div class="question-status" id="questionStatus">QUESTION INCOMING...</div>
+        <div class="timer-wrap hidden" id="timerWrap"><span id="timer">15</span><small>SEC</small></div>
         <h2 id="questionText">Get ready...</h2>
-        <div class="answers" id="answers"></div>
+        <div class="answers hidden" id="answers"></div>
         <div id="answerFeedback" class="feedback"></div>
       </div>
     </section>
 
     <section id="resultView" class="view hidden">
       <div class="card results">
-        <div class="badge">🏆 RACE FINISHED</div>
-        <h1>Final Leaderboard</h1>
-        <div id="myResult" class="my-result"></div>
-        <div id="leaderboard"></div>
-        <button class="primary full" onclick="location.href='/'">BACK TO HOME</button>
+        <div class="badge">🏁 FINISH LINE</div>
+        <div class="finish-animation" id="finishAnimation">
+          <div class="finish-track">
+            <div class="finish-strip"></div>
+            <div class="finish-car finish-car-1">🏎️</div>
+            <div class="finish-car finish-car-2">🏎️</div>
+            <div class="finish-car finish-car-3">🏎️</div>
+            <div class="finish-flag">🏁</div>
+          </div>
+        </div>
+        <div id="leaderboardContent" class="hidden">
+          <h1>Final Leaderboard</h1>
+          <div id="myResult" class="my-result"></div>
+          <div id="leaderboard"></div>
+          <button class="primary full" onclick="location.href='/'">BACK TO HOME</button>
+        </div>
       </div>
     </section>
   </main>
+
+  <div class="modal hidden" id="aboutModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeAbout">×</button>
+      <div class="badge">AI CLUB • EVENT QUIZ RACE</div>
+      <h2>About Quiz Race</h2>
+      <p><strong>Quiz Race</strong> is a working browser-based multiplayer quiz prototype made by the <strong>AI Club</strong>.</p>
+      <p>It is designed for college events, competitions and fun activities. Players join with a room code, race through timed questions, earn points based on speed and accuracy, and finish with a live leaderboard.</p>
+      <p class="muted">No app installation is required. Open the game in a browser and join the room created by the host.</p>
+    </div>
+  </div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="/app.js"></script>

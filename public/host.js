@@ -33,7 +33,7 @@ function addQuestion(q = ["", ["","","",""], 0]) {
         <option value="2" ${q[2]===2?"selected":""}>C</option>
         <option value="3" ${q[2]===3?"selected":""}>D</option>
       </select>
-      <input class="q-time" type="number" min="5" max="20" value="10"> sec
+      <input class="q-time" type="number" min="15" max="15" value="15"> sec
     </label>
   `;
   $("questionEditor").appendChild(wrap);
@@ -58,7 +58,7 @@ $("createRoom").onclick = async () => {
     text: el.querySelector(".q-text").value,
     options: [...el.querySelectorAll(".q-option")].map(x => x.value),
     correct: Number(el.querySelector(".q-correct").value),
-    timeLimit: Number(el.querySelector(".q-time").value)
+    timeLimit: 15
   }));
 
   try {
